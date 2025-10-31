@@ -1,2 +1,2 @@
-document.write(myName);
 let myName = 'Bob';
+document.write(myName);
