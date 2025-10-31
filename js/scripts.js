@@ -1,6 +1,32 @@
-let myName = 'Bob';
+Eevee = {
+    "name": "Eevee",
+    "type": ["Grass", "Poison"],
+    "height": 0.3
+  };
 
-let favoriteFood = 'oxtail';
-document.write(favoriteFood);
+Charmander = {
+    "name": "Charmander",
+    "type": ["Fire"],
+    "height": 0.6
+  };
 
-alert('Hello world');
+Torchic = {
+    "name": "Torchic",
+    "type": ["Fire"],
+    "height": 0.4
+  };
+Squirtle = {
+    "name": "Squirtle",
+    "type": ["Water"],
+    "height": 0.5
+  };
+
+Pikachu = {
+    "name": "Pikachu",
+    "type": ["Electric"],
+    "height": 0.4
+  };
+
+  
+pokemonList = [Eevee, Charmander, Torchic, Squirtle, Pikachu]
+  
