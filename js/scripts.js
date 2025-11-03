@@ -1,32 +1,42 @@
-Eevee = {
+//Array of pokemon objects
+pokemonList = [
+  {
     "name": "Eevee",
-    "type": ["Grass", "Poison"],
+    "types": ["Grass", "Poison"],
     "height": 0.3
-  };
-
-Charmander = {
+  },
+  {
     "name": "Charmander",
-    "type": ["Fire"],
+    "types": ["Fire"],
     "height": 0.6
-  };
-
-Torchic = {
+  },
+  {
     "name": "Torchic",
-    "type": ["Fire"],
+    "types": ["Fire"],
     "height": 0.4
-  };
-Squirtle = {
+  },  
+  {
     "name": "Squirtle",
-    "type": ["Water"],
+    "types": ["Water"], 
     "height": 0.5
-  };
-
-Pikachu = {
+  },
+  {
     "name": "Pikachu",
-    "type": ["Electric"],
+    "types": ["Electric"],
     "height": 0.4
-  };
+  }
+]
+//Setting the height threshold and label
+let tallestHeight = 0.5;
+let label = " - Wow, that’s big!";
 
-  
-pokemonList = [Eevee, Charmander, Torchic, Squirtle, Pikachu]
-  
+//Looping through the array of objects
+for (let i = 0; i < pokemonList.length; i++) {
+//conditional
+   if (pokemonList[i].height > tallestHeight)
+  {
+    document.write(pokemonList[i].name + " (height: " + pokemonList[i].height + ")" + label + "<br><br>");
+  }
+  else
+    document.write(pokemonList[i].name + " (height: " + pokemonList[i].height + ")" + "<br><br>");
+}
