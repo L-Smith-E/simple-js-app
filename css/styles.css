@@ -1,0 +1,43 @@
+:root {
+    --button-bg-color: #bababa;
+}
+
+/* Container for the list */
+.pokemon-list {
+  padding: 0;
+  margin: 0;
+  border: 2px solid #000000;      
+  width: 200px;                   
+  background-color: #f9f9f9;     
+  font-family: Arial, sans-serif;
+  list-style-type: none;
+}
+
+/* Each list item */
+.pokemon-list li {
+  margin: 5px 0;
+}
+
+/* Button styling */
+.pokemon-list button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+/* Hover effect */
+.pokemon-list button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Highlighted item (e.g., Ivysaur) */
+.pokemon-list .highlighted button {
+  background-color: #ffdddd;
+  border-left: 4px solid red;
+  font-weight: bold;
+}
