@@ -2,7 +2,7 @@
 let tallestHeight = 0.5;
 let label = " - Wow, that’s big!";
 let pokemonRepo = (function () {
-let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
+let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20';
   let pokemonList = [
   //   {
   //   "name": "Eevee",
@@ -131,19 +131,75 @@ let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
   }
 
   function showLoadingMessage() {
-    let loadingMessage = document.createElement('p');
-    loadingMessage.innerText = 'Loading...';
-    document.body.appendChild(loadingMessage);
+    if (!document.getElementById('loading-message')) {
+      let loadingMessage = document.createElement('p');
+      loadingMessage.id = 'loading-message';
+      loadingMessage.innerText = 'Loading...';
+      document.body.appendChild(loadingMessage);
+    }
   }
 
   function hideLoadingMessage() {
-    let loadingMessage = document.querySelector('p');
-    if (loadingMessage) {
-      document.body.removeChild(loadingMessage);
-    } 
+    let loadingMessage = document.getElementById('loading-message');
+    if (loadingMessage && loadingMessage.parentNode) {
+      loadingMessage.parentNode.removeChild(loadingMessage);
+    }
   }
 
+  function showModal(title, text) {
+  let modalContainer = document.querySelector('#modal-container');
 
+  // Clear all existing modal content
+  modalContainer.innerHTML = '';
+
+  let modal = document.createElement('div');
+  modal.classList.add('modal');
+
+  // Add the new modal content
+  let closeButtonElement = document.createElement('button');
+  closeButtonElement.classList.add('modal-close');
+  closeButtonElement.innerText = 'Close';
+  closeButtonElement.addEventListener('click', hideModal);
+
+  let titleElement = document.createElement('h1');
+  titleElement.innerText = title;
+
+  let contentElement = document.createElement('p');
+  contentElement.innerText = text;
+
+  modal.appendChild(closeButtonElement);
+  modal.appendChild(titleElement);
+  modal.appendChild(contentElement);
+  modalContainer.appendChild(modal);
+
+  modalContainer.classList.add('is-visible');
+
+  modalContainer.addEventListener('click', (e) => {
+  // Since this is also triggered when clicking INSIDE the modal
+  // We only want to close if the user clicks directly on the overlay
+  let target = e.target;
+  if (target === modalContainer) {
+    hideModal();
+  }
+});
+}
+
+function hideModal() {
+  let modalContainer = document.querySelector('#modal-container');
+  modalContainer.classList.remove('is-visible');
+}
+
+window.addEventListener('keydown', (e) => {
+    let modalContainer = document.querySelector('#modal-container');
+    if (e.key === 'Escape' && modalContainer.classList.contains('is-visible')) {
+      hideModal();  
+    }
+  });
+
+  document.querySelector('#show-modal').addEventListener('click', () => {
+    showModal('Modal title', 'This is the modal content!');
+  });
+  
   return {
     add: add,
     getAll: getAll,
@@ -152,10 +208,18 @@ let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
     showDetails: showDetails,
     loadlist: loadlist,
     loadDetails: loadDetails,
+    showModal: showModal,
+    hideModal: hideModal,
+
   };
 })();
 
+
+
+
 pokemonRepo.loadlist().then(function() {
+  // pokemonRepo.showModal('Modal title', 'This is the modal content!');
+  
   // Now the data is loaded
 //Looping through the array of objects
 pokemonRepo.getAll().forEach(function(pokemon){ 
@@ -164,3 +228,6 @@ pokemonRepo.getAll().forEach(function(pokemon){
 });
 
 });
+
+
+  
