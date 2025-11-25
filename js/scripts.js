@@ -1,6 +1,7 @@
 //IIFE to create pokemon repository
 let tallestHeight = 0.5;
 let label = " - Wow, that’s big!";
+let dialogPromiseReject;
 let pokemonRepo = (function () {
 let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20';
   let pokemonList = [];
@@ -36,7 +37,9 @@ let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20';
 
   function showDetails(pokemon) {
     loadDetails(pokemon).then(function () {
-      showModal(pokemon.name + " Height: " + pokemon.height);
+      showModal(pokemon.name, pokemon.name + " Height: " + pokemon.height, pokemon.imageUrl);
+      
+      
     console.log(pokemon.name + " clicked!");
     });
   }
@@ -126,7 +129,17 @@ showLoadingMessage();
     }
   }
 
-  function showModal(title, text) {
+  function hideModal() {
+  let modalContainer = document.querySelector('#modal-container');
+  modalContainer.classList.remove('is-visible');
+
+  if (dialogPromiseReject) {
+    dialogPromiseReject();
+    dialogPromiseReject = null;
+  }
+}
+
+  function showModal(title, text, img) {
   let modalContainer = document.querySelector('#modal-container');
 
   // Clear all existing modal content
@@ -147,9 +160,13 @@ showLoadingMessage();
   let contentElement = document.createElement('p');
   contentElement.innerText = text;
 
+  let imageElement = document.createElement('img');
+  imageElement.src = img;
+
   modal.appendChild(closeButtonElement);
   modal.appendChild(titleElement);
   modal.appendChild(contentElement);
+  modal.appendChild(imageElement);
   modalContainer.appendChild(modal);
 
   modalContainer.classList.add('is-visible');
@@ -164,9 +181,42 @@ showLoadingMessage();
 });
 }
 
-function hideModal() {
+function showDialog(title, text) {
+  showModal(title, text);
+
+  // We have defined modalContainer here
   let modalContainer = document.querySelector('#modal-container');
-  modalContainer.classList.remove('is-visible');
+
+  // We want to add a confirm and cancel button to the modal
+  let modal = modalContainer.querySelector('.modal');
+
+  let confirmButton = document.createElement('button');
+  confirmButton.classList.add('modal-confirm');
+  confirmButton.innerText = 'Confirm';
+
+  let cancelButton = document.createElement('button');
+  cancelButton.classList.add('modal-cancel');
+  cancelButton.innerText = 'Cancel';
+
+  modal.appendChild(confirmButton);
+  modal.appendChild(cancelButton);
+
+  // We want to focus the confirmButton so that the user can simply press Enter
+  confirmButton.focus();
+
+   // Return a promise that resolves when confirmed, else rejects
+  return new Promise((resolve, reject) => {
+  cancelButton.addEventListener('click', hideModal);
+  confirmButton.addEventListener('click', () => {
+    dialogPromiseReject = null; // Reset this
+    hideModal();
+    resolve();
+  });
+
+  // This can be used to reject from other functions
+  dialogPromiseReject = reject;
+});
+
 }
 
 window.addEventListener('keydown', (e) => {
@@ -180,6 +230,14 @@ window.addEventListener('keydown', (e) => {
     showModal('Modal title', 'This is the modal content!');
   });
 
+  document.querySelector('#show-dialog').addEventListener('click', () => {
+  showDialog('Confirm action', 'Are you sure you want to do this?').then(function() {
+    alert('confirmed!');
+  }, () => {
+    alert('not confirmed');
+  });
+});
+
   return {
     add: add,
     getAll: getAll,
@@ -189,6 +247,7 @@ window.addEventListener('keydown', (e) => {
     loadlist: loadlist,
     loadDetails: loadDetails,
     showModal: showModal,
+    showDialog: showDialog,
     hideModal: hideModal,
 
   };
