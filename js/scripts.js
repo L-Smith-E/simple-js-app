@@ -1,3 +1,5 @@
+//TODO: Implement Feed back from 1.8 Code Review
+
 //IIFE to create pokemon repository
 let tallestHeight = 0.5;
 let label = " - Wow, that’s big!";
@@ -45,34 +47,34 @@ let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20';
   }
 
   function addListItem(pokemon) {
-  let list = document.querySelector('.pokemon-list');
-  let button = document.createElement('button');
-  let listItem = document.createElement('li');
+  let list = $('.pokemon-list');
+  let button;
+  switch(pokemon.types.type.name) {
+    case 'fire':
+      button = $('<button type="button" class="btn btn-outline-danger">Danger</button>');
+      break;
+    case 'water':
+      button = $('<button type="button" class="btn btn-outline-primary">Primary</button>');
+      break;
+    case 'grass':
+      button = $('<button type="button" class="btn btn-outline-success">Success</button>');
+      break;
+    default:
+      button = $('<button type="button" class="btn btn-outline-secondary">Info</button>');
+      break;
+  }
+  
+  let listItem = $('<li class="list-group-item"></li>');
 
 
-  button.classList.add('pokemon-button');
-  button.innerText = pokemon.name + " (height: " + pokemon.height + ")";
-  listItem.classList.add('grid__item');
-  listItem.appendChild(button);
-  list.appendChild(listItem);
+  button.addClass('pokemon-button');
+  button.text(pokemon.name + " (height: " + pokemon.height + ")");
+  listItem.append(button);
+  list.append(listItem);
 
-button.addEventListener('click', function() {
+button.on('click', function() {
 showDetails(pokemon);
 });
-
-// loadDetails(pokemon).then(function() {
-//   //conditional
-//   if (pokemon.height > tallestHeight) {
-    
-//     //listItem.innerText = pokemon.name; 
-//     button.innerText = pokemon.name + " (height: " + pokemon.url.height + ")" + label;
-//     //document.write(pokemon.name + " (height: " + pokemon.height + ")" + label + "<br><br>");
-//   } else {
-//     //listItem.innerText = pokemon.name;
-//     button.innerText = pokemon.name + " (height: " + pokemon.url.height + ")";
-//     //document.write(pokemon.name + " (height: " + pokemon.height + ")" + "<br><br>");
-//     }
-// });
 }
 
 function loadlist() {
@@ -84,7 +86,7 @@ showLoadingMessage();
     json.results.forEach(function (item) {
       let pokemon = {     
         name: item.name,
-        height: item.height,
+        height: 0,
         detailsUrl: item.url
       };
       add(pokemon);
@@ -140,36 +142,47 @@ showLoadingMessage();
 }
 
   function showModal(title, text, img) {
-  let modalContainer = document.querySelector('#modal-container');
+  let modal = $('#modal-container');
 
-  // Clear all existing modal content
-  modalContainer.innerHTML = '';
+  body = $('.modal-body');
+  body.empty();
 
-  let modal = document.createElement('div');
-  modal.classList.add('modal');
+  $('.modal-title').text(title);
+  //$('.modal-body').html('<p>' + text + '</p>'); 
+  body.append('<div class="text-center"> <p>' + text + '</p> </div>');
+  body.append('<div class="text-center"> <img src="' + img + '" alt="' + title + '"> </div>');
 
-  // Add the new modal content
-  let closeButtonElement = document.createElement('button');
-  closeButtonElement.classList.add('modal-close');
-  closeButtonElement.innerText = 'Close';
-  closeButtonElement.addEventListener('click', hideModal);
+  //modal.
 
-  let titleElement = document.createElement('h1');
-  titleElement.innerText = title;
 
-  let contentElement = document.createElement('p');
-  contentElement.innerText = text;
+  modal.modal('show');
 
-  let imageElement = document.createElement('img');
-  imageElement.src = img;
 
-  modal.appendChild(closeButtonElement);
-  modal.appendChild(titleElement);
-  modal.appendChild(contentElement);
-  modal.appendChild(imageElement);
-  modalContainer.appendChild(modal);
+  // let modal = document.createElement('div');
+  // modal.classList.add('modal');
 
-  modalContainer.classList.add('is-visible');
+  // // Add the new modal content
+  // let closeButtonElement = document.createElement('button');
+  // closeButtonElement.classList.add('modal-close');
+  // closeButtonElement.innerText = 'Close';
+  // closeButtonElement.addEventListener('click', hideModal);
+
+  // let titleElement = document.createElement('h1');
+  // titleElement.innerText = title;
+
+  // let contentElement = document.createElement('p');
+  // contentElement.innerText = text;
+
+  // let imageElement = document.createElement('img');
+  // imageElement.src = img;
+
+  // modal.appendChild(closeButtonElement);
+  // modal.appendChild(titleElement);
+  // modal.appendChild(contentElement);
+  // modal.appendChild(imageElement);
+  // modalContainer.appendChild(modal);
+
+  // modalContainer.classList.add('is-visible');
 
   modalContainer.addEventListener('click', (e) => {
   // Since this is also triggered when clicking INSIDE the modal
@@ -181,62 +194,63 @@ showLoadingMessage();
 });
 }
 
-function showDialog(title, text) {
-  showModal(title, text);
+// function showDialog(title, text) {
+//   showModal(title, text);
 
-  // We have defined modalContainer here
-  let modalContainer = document.querySelector('#modal-container');
+//   // We have defined modalContainer here
+//   let modalContainer = $('#modal-container');
 
-  // We want to add a confirm and cancel button to the modal
-  let modal = modalContainer.querySelector('.modal');
+//   // We want to add a confirm and cancel button to the modal
+//   let modal = modalContainer.querySelector('.modal');
 
-  let confirmButton = document.createElement('button');
-  confirmButton.classList.add('modal-confirm');
-  confirmButton.innerText = 'Confirm';
+//   let confirmButton = document.createElement('button');
+//   confirmButton.classList.add('modal-confirm');
+//   confirmButton.innerText = 'Confirm';
 
-  let cancelButton = document.createElement('button');
-  cancelButton.classList.add('modal-cancel');
-  cancelButton.innerText = 'Cancel';
+//   let cancelButton = document.createElement('button');
+//   cancelButton.classList.add('modal-cancel');
+//   cancelButton.innerText = 'Cancel';
 
-  modal.appendChild(confirmButton);
-  modal.appendChild(cancelButton);
+//   modal.appendChild(confirmButton);
+//   modal.appendChild(cancelButton);
 
-  // We want to focus the confirmButton so that the user can simply press Enter
-  confirmButton.focus();
+//   // We want to focus the confirmButton so that the user can simply press Enter
+//   confirmButton.focus();
 
-   // Return a promise that resolves when confirmed, else rejects
-  return new Promise((resolve, reject) => {
-  cancelButton.addEventListener('click', hideModal);
-  confirmButton.addEventListener('click', () => {
-    dialogPromiseReject = null; // Reset this
-    hideModal();
-    resolve();
-  });
+//    // Return a promise that resolves when confirmed, else rejects
+//   return new Promise((resolve, reject) => {
+//   cancelButton.addEventListener('click', hideModal);
+//   confirmButton.addEventListener('click', () => {
+//     dialogPromiseReject = null; // Reset this
+//     hideModal();
+//     resolve();
+//   });
 
-  // This can be used to reject from other functions
-  dialogPromiseReject = reject;
-});
+//   // This can be used to reject from other functions
+//   dialogPromiseReject = reject;
+// });
 
-}
+// }
 
 window.addEventListener('keydown', (e) => {
-    let modalContainer = document.querySelector('#modal-container');
+    let modalContainer = ('#modal-container');
+    //showDetails(pokemon);
     if (e.key === 'Escape' && modalContainer.classList.contains('is-visible')) {
       hideModal();  
     }
   });
 
-  document.querySelector('#show-modal').addEventListener('click', () => {
-    showModal('Modal title', 'This is the modal content!');
-  });
+//   document.querySelector('#show-modal').addEventListener('click', () => {
+//     showModal('Modal title', 'This is the modal content!');
+//   });
 
-  document.querySelector('#show-dialog').addEventListener('click', () => {
-  showDialog('Confirm action', 'Are you sure you want to do this?').then(function() {
-    alert('confirmed!');
-  }, () => {
-    alert('not confirmed');
-  });
-});
+//   document.querySelector('#show-dialog').addEventListener('click', () => {
+//   showDialog('Confirm action', 'Are you sure you want to do this?').then(function() {
+//     alert('confirmed!');
+//   }, () => {
+//     alert('not confirmed');
+//   });
+// });
 
   return {
     add: add,
@@ -247,7 +261,7 @@ window.addEventListener('keydown', (e) => {
     loadlist: loadlist,
     loadDetails: loadDetails,
     showModal: showModal,
-    showDialog: showDialog,
+    //showDialog: showDialog,
     hideModal: hideModal,
 
   };
