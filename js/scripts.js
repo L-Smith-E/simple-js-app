@@ -41,28 +41,14 @@ let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20';
   function addListItem(pokemon) {
   let list = $('.pokemon-list');
   let button = $('<button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-container"></button>');
-
-  //future feature to color code buttons based on type
-  // switch(pokemon.types.slot[1].type.name) {
-  //   case 'fire':
-  //     button.removeClass('btn-outline-info').addClass('btn btn-outline-danger');
-  //     break;
-  //   case 'water':
-  //     button.removeClass('btn-outline-info').addClass('btn btn-outline-primary');
-  //     break;
-  //   case 'grass':
-  //     button.removeClass('btn-outline-info').addClass('btn btn-outline-success');
-  //     break;
-  //   default:
-  //     button.removeClass('btn-outline-info').addClass('btn btn-outline-secondary');
-  //     break;
-  // }
-  
+  let img = $('<div class="text-right"> <img src="' + pokemon.imageUrl + '" alt= "' + pokemon.name + '"> </div>');
   let listItem = $('<li class="list-group-item"></li>');
   
   button.text(pokemon.name);
   listItem.append(button);
   list.append(listItem);
+  listItem.append(img);
+  
 
 button.on('click', function() {
 showDetails(pokemon);
@@ -108,8 +94,8 @@ showLoadingMessage();
   }
 
   function showLoadingMessage() {
-    if (!document.getElementById('loading-message')) {
-      let loadingMessage = document.createElement('p');
+    if (!$('loading-message')) {
+      let loadingMessage = document.addClass('p');
       loadingMessage.id = 'loading-message';
       loadingMessage.innerText = 'Loading...';
       document.body.appendChild(loadingMessage);
@@ -117,15 +103,15 @@ showLoadingMessage();
   }
 
   function hideLoadingMessage() {
-    let loadingMessage = document.getElementById('loading-message');
+    let loadingMessage = $('loading-message');
     if (loadingMessage && loadingMessage.parentNode) {
       loadingMessage.parentNode.removeChild(loadingMessage);
     }
   }
 
   function hideModal() {
-  let modalContainer = document.querySelector('#modal-container');
-  modalContainer.classList.remove('is-visible');
+  let modalContainer = $('#modal-container');
+  modalContainer.removeClass('is-visible');
 
   if (dialogPromiseReject) {
     dialogPromiseReject();
@@ -134,7 +120,6 @@ showLoadingMessage();
 }
 
   function showModal(title, text, img) {
-  let modal = $('#modal-container');
 
   body = $('.modal-body');
   body.empty();
