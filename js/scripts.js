@@ -19,14 +19,6 @@ let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20';
   else {
     console.warn("Invalid pokemon object. Please provide an object with 'name', 'height', and 'types' properties.");
   }
-  // const hasAllkeys = requiredkeys.every(key =>pokemon.hasOwnProperty(key));
-  //   if ((typeof pokemon === "object" && hasAllkeys) /*&& Object.keys(pokemon).includes("name") && Object.keys(pokemon).includes("height")*/) {
-  //   pokemonList.push(pokemon);
-  //   } 
-  //   else
-  //   {
-  //     console.warn("Invalid pokemon object. Please provide an object with 'name', 'height', and 'types' properties.");
-  //   }
   }   
 
   function getAll() {
@@ -48,27 +40,27 @@ let apiURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20';
 
   function addListItem(pokemon) {
   let list = $('.pokemon-list');
-  let button;
-  switch(pokemon.types.type.name) {
-    case 'fire':
-      button = $('<button type="button" class="btn btn-outline-danger">Danger</button>');
-      break;
-    case 'water':
-      button = $('<button type="button" class="btn btn-outline-primary">Primary</button>');
-      break;
-    case 'grass':
-      button = $('<button type="button" class="btn btn-outline-success">Success</button>');
-      break;
-    default:
-      button = $('<button type="button" class="btn btn-outline-secondary">Info</button>');
-      break;
-  }
+  let button = $('<button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-container"></button>');
+
+  //future feature to color code buttons based on type
+  // switch(pokemon.types.slot[1].type.name) {
+  //   case 'fire':
+  //     button.removeClass('btn-outline-info').addClass('btn btn-outline-danger');
+  //     break;
+  //   case 'water':
+  //     button.removeClass('btn-outline-info').addClass('btn btn-outline-primary');
+  //     break;
+  //   case 'grass':
+  //     button.removeClass('btn-outline-info').addClass('btn btn-outline-success');
+  //     break;
+  //   default:
+  //     button.removeClass('btn-outline-info').addClass('btn btn-outline-secondary');
+  //     break;
+  // }
   
   let listItem = $('<li class="list-group-item"></li>');
-
-
-  button.addClass('pokemon-button');
-  button.text(pokemon.name + " (height: " + pokemon.height + ")");
+  
+  button.text(pokemon.name);
   listItem.append(button);
   list.append(listItem);
 
@@ -152,38 +144,6 @@ showLoadingMessage();
   body.append('<div class="text-center"> <p>' + text + '</p> </div>');
   body.append('<div class="text-center"> <img src="' + img + '" alt="' + title + '"> </div>');
 
-  //modal.
-
-
-  modal.modal('show');
-
-
-  // let modal = document.createElement('div');
-  // modal.classList.add('modal');
-
-  // // Add the new modal content
-  // let closeButtonElement = document.createElement('button');
-  // closeButtonElement.classList.add('modal-close');
-  // closeButtonElement.innerText = 'Close';
-  // closeButtonElement.addEventListener('click', hideModal);
-
-  // let titleElement = document.createElement('h1');
-  // titleElement.innerText = title;
-
-  // let contentElement = document.createElement('p');
-  // contentElement.innerText = text;
-
-  // let imageElement = document.createElement('img');
-  // imageElement.src = img;
-
-  // modal.appendChild(closeButtonElement);
-  // modal.appendChild(titleElement);
-  // modal.appendChild(contentElement);
-  // modal.appendChild(imageElement);
-  // modalContainer.appendChild(modal);
-
-  // modalContainer.classList.add('is-visible');
-
   modalContainer.addEventListener('click', (e) => {
   // Since this is also triggered when clicking INSIDE the modal
   // We only want to close if the user clicks directly on the overlay
@@ -194,43 +154,6 @@ showLoadingMessage();
 });
 }
 
-// function showDialog(title, text) {
-//   showModal(title, text);
-
-//   // We have defined modalContainer here
-//   let modalContainer = $('#modal-container');
-
-//   // We want to add a confirm and cancel button to the modal
-//   let modal = modalContainer.querySelector('.modal');
-
-//   let confirmButton = document.createElement('button');
-//   confirmButton.classList.add('modal-confirm');
-//   confirmButton.innerText = 'Confirm';
-
-//   let cancelButton = document.createElement('button');
-//   cancelButton.classList.add('modal-cancel');
-//   cancelButton.innerText = 'Cancel';
-
-//   modal.appendChild(confirmButton);
-//   modal.appendChild(cancelButton);
-
-//   // We want to focus the confirmButton so that the user can simply press Enter
-//   confirmButton.focus();
-
-//    // Return a promise that resolves when confirmed, else rejects
-//   return new Promise((resolve, reject) => {
-//   cancelButton.addEventListener('click', hideModal);
-//   confirmButton.addEventListener('click', () => {
-//     dialogPromiseReject = null; // Reset this
-//     hideModal();
-//     resolve();
-//   });
-
-//   // This can be used to reject from other functions
-//   dialogPromiseReject = reject;
-// });
-
-// }
 
 window.addEventListener('keydown', (e) => {
     let modalContainer = ('#modal-container');
@@ -239,18 +162,6 @@ window.addEventListener('keydown', (e) => {
       hideModal();  
     }
   });
-
-//   document.querySelector('#show-modal').addEventListener('click', () => {
-//     showModal('Modal title', 'This is the modal content!');
-//   });
-
-//   document.querySelector('#show-dialog').addEventListener('click', () => {
-//   showDialog('Confirm action', 'Are you sure you want to do this?').then(function() {
-//     alert('confirmed!');
-//   }, () => {
-//     alert('not confirmed');
-//   });
-// });
 
   return {
     add: add,
@@ -261,7 +172,6 @@ window.addEventListener('keydown', (e) => {
     loadlist: loadlist,
     loadDetails: loadDetails,
     showModal: showModal,
-    //showDialog: showDialog,
     hideModal: hideModal,
 
   };
